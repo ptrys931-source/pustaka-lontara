@@ -3,386 +3,365 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="PUSTAKA LONTARA - Perpustakaan Digital & Fisik Modern">
-  <title>PUSTAKA LONTARA | Your World of Knowledge</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+  <title>PUSTAKA LONTARA - Ruang Baca Digital</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-  <!-- HEADER / NAVBAR -->
-  <header class="site-header">
-    <nav class="navbar container">
-      <a class="brand" href="#beranda" aria-label="PUSTAKA LONTARA Beranda">
-        <span class="brand-dots">••</span>
-        <span class="brand-text">PUSTAKA<br>LONTARA</span>
-      </a>
-      
-      <div class="nav-right-actions">
-        <!-- Toggle Dark/Light Mode -->
-        <button class="theme-toggle" id="themeToggle" title="Ubah Mode Tampilan" aria-label="Toggle Theme">🌙</button>
-        <!-- Tombol Masuk / Login -->
-        <button class="btn-masuk" id="openLoginModal">Masuk</button>
-        <!-- Tombol Hamburger Mobile -->
-        <button class="menu-toggle" id="menuToggle" aria-label="Buka Menu">☰</button>
-      </div>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="#beranda" class="logo">
+      <span class="logo-icon">📖</span>
+      <span>
+        <strong>PUSTAKA<br>LONTARA</strong>
+        <small>Ruang Baca Digital</small>
+      </span>
+    </a>
 
-      <div class="nav-links" id="navLinks">
-        <a class="nav-item active" href="#beranda">Home</a>
-        <a class="nav-item" href="#katalog">Katalog</a>
-        <a class="nav-item" href="#buku-fisik">Buku Fisik</a>
-        <a class="nav-item" href="#koleksi-saya">Koleksi Saya</a>
-        <a class="nav-item" href="#tentang">About</a>
-      </div>
+    <nav id="navMenu">
+      <a href="#beranda">Beranda</a>
+      <a href="#katalog">Katalog</a>
+      <a href="#buku-fisik">Buku Fisik</a>
+      <a href="#koleksi">Koleksi Saya</a>
+      <a href="#tentang">Tentang</a>
     </nav>
+
+    <div class="nav-actions">
+      <button id="themeToggle" class="theme-btn" title="Ganti tema">☾</button>
+      <button id="loginBtn" class="login-btn">Masuk</button>
+      <button id="menuToggle" class="menu-btn">☰</button>
+    </div>
   </header>
 
-  <main>
-    <!-- HERO SECTION -->
-    <section class="hero" id="beranda">
-      <div class="container hero-content">
-        <span class="sub-eyebrow">— YOUR WORLD OF KNOWLEDGE</span>
-        <h1>Samudera Ilmu<br>di Setiap <em>Lembaran.</em></h1>
-        <p>Jelajahi koleksi bacaan berkualitas tinggi, temukan inspirasi tanpa batas, dan perluas wawasan bersama PUSTAKA LONTARA.</p>
-        
-        <div class="hero-buttons">
-          <a class="btn-primary" href="#katalog">Jelajahi Katalog →</a>
-          <a class="btn-secondary" href="#tentang">Kenali PUSTAKA LONTARA</a>
-        </div>
+  <!-- BERANDA -->
+  <section class="hero" id="beranda">
+    <div class="hero-content">
+      <span class="eyebrow">SELAMAT DATANG DI PUSTAKA LONTARA</span>
 
-        <div class="hero-banner-card">
-          <h2>Membaca Hari Ini,<br>Menyalakan Masa Depan<br><em>Cemerlang.</em></h2>
+      <h1>Temukan Dunia Baru Melalui Buku.</h1>
+
+      <p>
+        Jelajahi berbagai koleksi buku menarik, perluas wawasan,
+        dan temukan inspirasi baru melalui perpustakaan digital
+        Pustaka Lontara.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#katalog" class="btn-primary">Jelajahi Koleksi →</a>
+        <a href="#tentang" class="btn-outline">Tentang Kami</a>
+      </div>
+
+      <div class="hero-stats">
+        <div>
+          <strong>100+</strong>
+          <span>Koleksi Buku</span>
+        </div>
+        <div>
+          <strong>Digital</strong>
+          <span>Akses Mudah</span>
+        </div>
+        <div>
+          <strong>Gratis</strong>
+          <span>Jelajahi Buku</span>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- KATEGORI EMPAT GENRE UTAMA -->
-    <section class="category-section section-padding">
-      <div class="container">
-        <span class="sub-eyebrow">— EMPAT GENRE UTAMA</span>
-        <h2 class="section-title">Kategori Koleksi</h2>
-        <p class="section-desc">Satu sistem kategori terpadu untuk buku digital maupun fisik.</p>
+    <div class="hero-image">
+      <img
+        src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1000"
+        alt="Perpustakaan"
+      >
 
-        <div class="category-cards-grid">
-          <div class="category-box">
-            <span class="cat-number">01</span>
-            <h3>Alam dan Kehidupan</h3>
-            <p>Hewan, tumbuhan, laut, tubuh manusia, psikologi, dan fenomena alam.</p>
-            <span class="cat-link">4 koleksi tersedia →</span>
-          </div>
-          <div class="category-box">
-            <span class="cat-number">02</span>
-            <h3>Sains dan Semesta</h3>
-            <p>Luar angkasa, planet, galaksi, teknologi, penemuan, dan ilmu pengetahuan.</p>
-            <span class="cat-link">4 koleksi tersedia →</span>
-          </div>
-          <div class="category-box">
-            <span class="cat-number">03</span>
-            <h3>Sejarah dan Peradaban</h3>
-            <p>Sejarah tersembunyi, peradaban kuno, tokoh dunia, dan evolusi budaya.</p>
-            <span class="cat-link">3 koleksi tersedia →</span>
-          </div>
-          <div class="category-box">
-            <span class="cat-number">04</span>
-            <h3>Misteri dan Fakta Unik</h3>
-            <p>Kisah aneh tapi nyata, teka-teki alam semesta, dan ensiklopedia mini.</p>
-            <span class="cat-link">3 koleksi tersedia →</span>
-          </div>
+      <div class="image-note">
+        <span>📖</span>
+        <div>
+          <strong>Mulai Petualanganmu</strong>
+          <small>Setiap buku punya cerita</small>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- KATALOG BUKU -->
-    <section class="catalog-section section-padding" id="katalog">
-      <div class="container">
-        <span class="sub-eyebrow">— JELAJAHI KOLEKSI</span>
-        <h2 class="section-title">Katalog Pustaka</h2>
-        <p class="section-desc">Cari, saring, dan urutkan seluruh koleksi bacaan pilihan kami.</p>
+  <!-- KATEGORI -->
+  <section class="categories section" id="kategori">
+    <span class="eyebrow center">JELAJAHI</span>
+    <h2>Kategori Pilihan</h2>
+    <p class="section-desc">
+      Temukan bacaan sesuai minat dan kesukaanmu.
+    </p>
 
-        <div class="catalog-controls">
-          <div class="search-sort-group">
-            <div class="search-wrapper">
-              <span class="search-icon">🔍</span>
-              <input type="search" id="searchInput" placeholder="Cari judul, deskripsi, genre...">
-            </div>
+    <div class="category-grid">
+      <button class="category-card" data-category="Alam">
+        <span>🌿</span>
+        <strong>Alam</strong>
+        <small>Pengetahuan alam dan kehidupan</small>
+      </button>
 
-            <div class="sort-wrapper">
-              <select id="sortSelect" aria-label="Urutkan Buku">
-                <option value="popular">Urutkan: Paling Disukai</option>
-                <option value="title-asc">Urutkan: Judul (A-Z)</option>
-                <option value="title-desc">Urutkan: Judul (Z-A)</option>
-              </select>
-            </div>
-          </div>
+      <button class="category-card" data-category="Sains">
+        <span>🔭</span>
+        <strong>Sains</strong>
+        <small>Ilmu pengetahuan dan semesta</small>
+      </button>
 
-          <!-- Filter Genre -->
-          <div class="filter-group" id="genreFilters">
-            <button class="chip active" data-genre="Semua">Semua Genre</button>
-            <button class="chip" data-genre="Alam dan Kehidupan">Alam dan Kehidupan</button>
-            <button class="chip" data-genre="Sains dan Semesta">Sains dan Semesta</button>
-            <button class="chip" data-genre="Sejarah dan Peradaban">Sejarah dan Peradaban</button>
-            <button class="chip" data-genre="Misteri dan Fakta Unik">Misteri dan Fakta Unik</button>
-          </div>
+      <button class="category-card" data-category="Sejarah">
+        <span>🏛️</span>
+        <strong>Sejarah</strong>
+        <small>Kisah masa lalu dan peradaban</small>
+      </button>
 
-          <!-- Filter Tipe Buku -->
-          <div class="filter-group" id="typeFilters">
-            <button class="chip chip-type active" data-type="Semua">Semua Buku</button>
-            <button class="chip chip-type" data-type="Digital">Digital</button>
-            <button class="chip chip-type" data-type="Fisik">Fisik</button>
-          </div>
-        </div>
+      <button class="category-card" data-category="Misteri">
+        <span>✨</span>
+        <strong>Misteri</strong>
+        <small>Fakta unik dan hal menarik</small>
+      </button>
+    </div>
+  </section>
 
-        <div class="result-info">
-          <span id="bookCount">0 buku ditemukan</span>
-        </div>
+  <!-- KATALOG DIGITAL -->
+  <section class="catalog section" id="katalog">
+    <span class="eyebrow center">KOLEKSI DIGITAL</span>
+    <h2>Temukan Buku Favoritmu</h2>
+    <p class="section-desc">
+      Pilih buku yang ingin kamu baca dan jelajahi.
+    </p>
 
-        <div class="book-grid" id="bookGrid">
-          <!-- Kartu Buku Diquery otomatis lewat JavaScript -->
-        </div>
-        <p class="empty-state" id="emptyState" hidden>Tidak ada buku yang sesuai dengan pencarian Anda.</p>
+    <div class="filter-bar">
+      <input
+        type="search"
+        id="searchInput"
+        placeholder="Cari judul atau penulis buku..."
+      >
+
+      <select id="sortSelect">
+        <option value="default">Urutan Default</option>
+        <option value="az">Nama A-Z</option>
+        <option value="za">Nama Z-A</option>
+      </select>
+    </div>
+
+    <div class="filter-options">
+      <div id="genreFilters">
+        <button class="filter-btn active" data-genre="Semua">Semua Kategori</button>
+        <button class="filter-btn" data-genre="Alam">Alam</button>
+        <button class="filter-btn" data-genre="Sains">Sains</button>
+        <button class="filter-btn" data-genre="Sejarah">Sejarah</button>
+        <button class="filter-btn" data-genre="Misteri">Misteri</button>
       </div>
-    </section>
 
-    <!-- BUKU FISIK SECTION -->
-    <section class="physical-section section-padding" id="buku-fisik">
-      <div class="container">
-        <span class="sub-eyebrow">— KOLEKSI NYATA</span>
-        <h2 class="section-title">Buku Fisik Pilihan</h2>
-        <p class="section-desc">Ajukan peminjaman lewat website (admin menyetujui) atau WhatsApp admin (085219454256). Durasi pinjam 7 hari · denda telat Rp2.000/hari.</p>
-        
-        <div class="info-box">
-          <p>📱 <strong>Pengajuan via WhatsApp?</strong> Tekan tombol "Pinjam Buku" atau "Detail" → pilih WhatsApp. Nama, nomor HP, judul & ID buku terisi otomatis.</p>
-        </div>
-
-        <div class="book-grid" id="physicalBookGrid">
-          <!-- Kartu khusus Buku Fisik -->
-        </div>
+      <div id="typeFilters">
+        <button class="filter-btn active" data-type="Semua">Semua Jenis</button>
+        <button class="filter-btn" data-type="Digital">Digital</button>
+        <button class="filter-btn" data-type="Fisik">Fisik</button>
       </div>
-    </section>
+    </div>
 
-    <!-- FUN FACT & CALL TO ACTION -->
-    <section class="fun-fact-section section-padding">
-      <div class="container">
-        <div class="fun-fact-card">
-          <span class="card-eyebrow">— FUN FACT LITERASI</span>
-          <p id="funFactText">"Ada lebih banyak kemungkinan susunan satu tumpukan kartu remi daripada jumlah atom di Bumi."</p>
-          <small class="fun-fact-note">Fakta menarik diperbarui otomatis setiap sesi jelajah ✨</small>
-        </div>
+    <p class="book-count" id="bookCount"></p>
 
-        <div class="cta-banner-card">
-          <h2>Mulai Perjalanan<br><em>Membacamu</em></h2>
-          <p>Satu halaman hari ini, seribu rahasia esok hari.</p>
-          <a class="btn-primary" href="#" id="openRegisterModalBtn">Daftar Gratis Sekarang</a>
-        </div>
-      </div>
-    </section>
+    <div class="book-grid" id="bookGrid"></div>
 
-    <!-- KOLEKSI BUKU ANDA (WISHLIST SECTION) -->
-    <section class="wishlist-section section-padding" id="koleksi-saya">
-      <div class="container">
-        <span class="sub-eyebrow">— PUSTAKA PRIBADI</span>
-        <h2 class="section-title">Koleksi Buku Anda</h2>
-        <p class="section-desc">Daftar buku pilihan yang Anda sukai dan simpan untuk dibaca kembali.</p>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <span>📚</span>
+      <p>Buku tidak ditemukan.</p>
+    </div>
+  </section>
 
-        <div class="book-grid" id="wishlistGrid">
-          <!-- Buku yang disukai akan muncul di sini secara otomatis -->
-        </div>
-        <p class="empty-state" id="emptyWishlistState">Belum ada buku dalam koleksi Anda. Tekan ikon hati (🤍) pada buku yang Anda sukai!</p>
-      </div>
-    </section>
+  <!-- BUKU FISIK -->
+  <section class="physical-section section" id="buku-fisik">
+    <span class="eyebrow center">KOLEKSI CETAK</span>
+    <h2>Buku Fisik Pilihan</h2>
+    <p class="section-desc">
+      Temukan buku yang dapat dipinjam secara langsung.
+    </p>
 
-    <!-- TENTANG KAMI, STORY, VISI MISI & CREATOR -->
-    <section class="about-section section-padding" id="tentang">
-      <div class="container">
-        <span class="sub-eyebrow">— TENTANG KAMI</span>
-        <h2 class="section-title">PUSTAKA LONTARA</h2>
-        <p class="section-desc">Samudera Ilmu di Setiap Lembaran. · Your World of Knowledge.</p>
+    <div class="book-grid" id="physicalBookGrid"></div>
+  </section>
 
-        <div class="info-card">
-          <span class="card-eyebrow">— OUR STORY</span>
-          <p>PUSTAKA LONTARA lahir dari sebuah dedikasi tugas perkuliahan: membangun platform perpustakaan digital dan fisik yang estetis dan interaktif. Terinspirasi dari kearifan lokal dipadukan teknologi modern, kami merancang ruang baca yang hangat bagi siapa saja yang haus akan ilmu.</p>
-        </div>
+  <!-- FAKTA MENARIK -->
+  <section class="fact-section section">
+    <span class="fact-icon">💡</span>
+    <h2>Tahukah Kamu?</h2>
+    <p id="funFactText">
+      Membaca buku dapat menambah wawasan dan pengetahuan.
+    </p>
+    <small>Klik tulisan fakta untuk melihat fakta lainnya.</small>
+  </section>
 
-        <div class="info-card">
-          <span class="card-eyebrow">— OUR VISION & MISSION</span>
-          <h3>Visi</h3>
-          <p>Menjadi pusat literasi digital dan fisik terdepan yang mudah diakses, inspiratif, dan memperluas wawasan masyarakat luas.</p>
-          
-          <h3 class="mt-16">Misi</h3>
-          <ul class="mission-list">
-            <li>Menyediakan koleksi bacaan berkualitas tinggi lintas genre.</li>
-            <li>Mengintegrasikan sistem peminjaman fisik dan akses digital yang mulus.</li>
-            <li>Membangun komunitas pembelajar yang aktif dan berwawasan luas.</li>
-          </ul>
-        </div>
+  <!-- KOLEKSI FAVORIT -->
+  <section class="wishlist-section section" id="koleksi">
+    <span class="eyebrow center">BUKU FAVORIT</span>
+    <h2>Koleksi Saya</h2>
+    <p class="section-desc">
+      Simpan buku yang ingin kamu baca nanti.
+    </p>
 
-        <div class="creator-card">
-          <span class="card-eyebrow">— THE CREATOR</span>
-          <div class="creator-avatar">
-            <div class="avatar-placeholder">👩‍💻</div>
-          </div>
-          <h3>Putri Sinta Desianti</h3>
-          <p class="creator-sub">Mahasiswa Teknik Informatika<br>Universitas Nahdlatul Ulama Sulawesi Tenggara</p>
-          <a class="btn-secondary small" href="#katalog">Jelajahi Koleksi Pustaka →</a>
-          <small class="avatar-note">Pengembang & Perancang Sistem PUSTAKA LONTARA.</small>
-        </div>
-      </div>
-    </section>
-  </main>
+    <div class="book-grid" id="wishlistGrid"></div>
+
+    <div id="emptyWishlistState" class="empty-state">
+      <span>♡</span>
+      <p>Belum ada buku favorit.</p>
+    </div>
+  </section>
+
+  <!-- TENTANG KAMI -->
+  <section class="about-section section" id="tentang">
+    <div class="about-image">
+      <img
+        src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=900"
+        alt="Rak buku perpustakaan"
+      >
+    </div>
+
+    <div class="about-content">
+      <span class="eyebrow">TENTANG KAMI</span>
+
+      <h2>Membuka Jendela Dunia Melalui Bacaan.</h2>
+
+      <p>
+        Pustaka Lontara merupakan perpustakaan digital sederhana
+        yang membantu pengunjung menemukan berbagai koleksi buku.
+        Kami berharap website ini dapat menjadi tempat untuk
+        belajar, membaca, dan mendapatkan pengetahuan baru.
+      </p>
+
+      <a href="#katalog" class="btn-primary">
+        Lihat Koleksi Buku
+      </a>
+    </div>
+  </section>
 
   <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="container footer-content">
-      <div class="footer-brand">
-        <h3>PUSTAKA LONTARA</h3>
-        <p>Samudera Ilmu di Setiap Lembaran. Your World of Knowledge. Perpustakaan modern untuk generasi pembelajar.</p>
-      </div>
-
-      <div class="footer-links-group">
-        <h4>JELAJAH</h4>
-        <ul>
-          <li><a href="#katalog">Katalog Buku</a></li>
-          <li><a href="#buku-fisik">Buku Fisik</a></li>
-          <li><a href="#tentang">Tentang Kami</a></li>
-          <li><a href="#" id="footerRulesLink">Aturan Perpustakaan</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-links-group">
-        <h4>AKUN</h4>
-        <ul>
-          <li><a href="#" id="footerLogin">Masuk</a></li>
-          <li><a href="#" id="footerRegister">Daftar</a></li>
-          <li><a href="#" id="footerProfile">Profil Saya</a></li>
-        </ul>
-      </div>
+  <footer class="footer">
+    <div>
+      <h3>📖 PUSTAKA LONTARA</h3>
+      <p>Ruang baca digital untuk semua.</p>
     </div>
-    <div class="footer-bottom">
-      <div class="container">
-        <p>© 2026 PUSTAKA LONTARA · Dibuat oleh Putri Sinta Desianti — Universitas Nahdlatul Ulama Sulawesi Tenggara</p>
-      </div>
+
+    <div>
+      <h4>Navigasi</h4>
+      <a href="#beranda">Beranda</a>
+      <a href="#katalog">Katalog</a>
+      <a href="#tentang">Tentang Kami</a>
     </div>
+
+    <div>
+      <h4>Akun</h4>
+      <a href="#koleksi" id="footerProfile">Koleksi Saya</a>
+      <a href="#" id="footerRules">Aturan Peminjaman</a>
+    </div>
+
+    <p class="copyright">
+      © 2026 Pustaka Lontara. Semua Hak Dilindungi.
+    </p>
   </footer>
 
-  <!-- MODAL LOGIN / MASUK -->
-  <div class="modal-backdrop" id="loginModal" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-      <button class="modal-close" id="closeLoginModal" aria-label="Tutup">&times;</button>
-      <span class="sub-eyebrow">— AKUN PENGGUNA</span>
-      <h2 id="loginTitle">Masuk Ke <em>PUSTAKA LONTARA</em></h2>
-      <p class="modal-desc">Masukkan email/NIM dan kata sandi Anda.</p>
-      
+  <!-- MODAL LOGIN -->
+  <div class="modal" id="loginModal">
+    <div class="modal-content">
+      <button class="modal-close" data-close>×</button>
+
+      <h2>Masuk Pustaka Lontara</h2>
+
       <form id="loginForm">
-        <div class="form-group">
-          <label for="loginEmail">Email / NIM</label>
-          <input type="text" id="loginEmail" placeholder="Masukkan Email atau NIM" required>
-        </div>
-        <div class="form-group">
-          <label for="loginPassword">Kata Sandi</label>
-          <input type="password" id="loginPassword" placeholder="••••••••" required>
-        </div>
-        <button type="submit" class="btn-primary full-width">Masuk Sekarang →</button>
+        <input
+          type="text"
+          id="loginName"
+          placeholder="Nama lengkap"
+          required
+        >
+
+        <input
+          type="email"
+          id="loginEmail"
+          placeholder="Email"
+          required
+        >
+
+        <button class="btn-primary" type="submit">Masuk</button>
       </form>
+
+      <p class="modal-footer-text">
+        Belum punya akun?
+        <a href="#" id="registerBtn">Daftar di sini</a>
+      </p>
     </div>
   </div>
 
-  <!-- MODAL PEMINJAMAN WHATSAPP -->
-  <div class="modal-backdrop" id="borrowModal" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="borrowTitle">
-      <button class="modal-close" id="closeBorrowModal" aria-label="Tutup">&times;</button>
-      <span class="sub-eyebrow">— FORMULIR PEMINJAMAN</span>
-      <h2 id="borrowTitle">Ajukan <em>Peminjaman</em></h2>
-      <div class="selected-book-badge" id="selectedBookBadge"></div>
-      
+  <!-- MODAL PEMINJAMAN -->
+  <div class="modal" id="borrowModal">
+    <div class="modal-content">
+      <button class="modal-close" data-close>×</button>
+
+      <h2>Formulir Peminjaman</h2>
+
+      <div id="selectedBookBadge" class="selected-book"></div>
+
       <form id="borrowForm">
-        <input type="hidden" id="borrowBookId">
-        <input type="hidden" id="borrowBookTitle">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="borrowName">Nama Lengkap</label>
-            <input type="text" id="borrowName" placeholder="Nama Anda" required>
-          </div>
-          <div class="form-group">
-            <label for="borrowNim">NIM</label>
-            <input type="text" id="borrowNim" placeholder="Nomor Induk Mahasiswa" required>
-          </div>
-          <div class="form-group">
-            <label for="borrowClass">Kelas / Prodi</label>
-            <input type="text" id="borrowClass" placeholder="Contoh: TI-A" required>
-          </div>
-          <div class="form-group">
-            <label for="borrowPhone">Nomor WhatsApp</label>
-            <input type="tel" id="borrowPhone" placeholder="08xxxxxxxxxx" required>
-          </div>
-        </div>
-        <button type="submit" class="btn-primary full-width">Kirim Pengajuan via WhatsApp ↗</button>
+        <input
+          type="text"
+          id="borrowName"
+          placeholder="Nama lengkap"
+          required
+        >
+
+        <input
+          type="tel"
+          id="borrowPhone"
+          placeholder="Nomor HP / WhatsApp"
+          required
+        >
+
+        <textarea
+          id="borrowAddress"
+          placeholder="Alamat lengkap"
+          required
+        ></textarea>
+
+        <button type="submit" class="btn-primary">
+          Kirim Permintaan
+        </button>
       </form>
     </div>
   </div>
 
-  <!-- MODAL ATURAN PERPUSTAKAAN -->
-  <div class="modal-backdrop" id="rulesModal" aria-hidden="true">
-    <div class="modal-box modal-large" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
-      <button class="modal-close" id="closeRulesModal" aria-label="Tutup">&times;</button>
-      <span class="sub-eyebrow">— PANDUAN & KETENTUAN</span>
-      <h2 id="rulesTitle">Aturan <em>PUSTAKA LONTARA</em></h2>
-      <p class="modal-desc">Mohon membaca dan mematuhi ketentuan berikut demi kenyamanan bersama.</p>
-      
-      <div class="rules-content">
-        <div class="rule-item">
-          <h4>1. Peminjaman Buku Fisik</h4>
-          <ul>
-            <li>Durasi peminjaman maksimal adalah <strong>7 (tujuh) hari</strong> sejak pengajuan disetujui admin.</li>
-            <li>Batas maksimal buku yang dapat dipinjam secara bersamaan adalah <strong>2 (dua) buku</strong>.</li>
-            <li>Pengajuan lewat WhatsApp wajib menyertakan identitas diri (Nama, NIM, Kelas) yang valid.</li>
-          </ul>
-        </div>
-        <div class="rule-item">
-          <h4>2. Denda & Keterlambatan</h4>
-          <ul>
-            <li>Keterlambatan pengembalian buku dikenakan denda sebesar <strong>Rp2.000 / hari / buku</strong>.</li>
-            <li>Apabila buku hilang atau rusak berat, peminjam wajib mengganti dengan buku yang serupa.</li>
-          </ul>
-        </div>
-        <div class="rule-item">
-          <h4>3. Akses Buku Digital</h4>
-          <ul>
-            <li>Koleksi digital dapat dibaca langsung kapan saja melalui platform.</li>
-            <li>Dilarang memperjualbelikan atau mendistribusikan ulang konten tanpa izin.</li>
-          </ul>
-        </div>
-      </div>
+  <!-- MODAL ATURAN -->
+  <div class="modal" id="rulesModal">
+    <div class="modal-content">
+      <button class="modal-close" data-close>×</button>
 
-      <button class="btn-primary full-width mt-16" id="acceptRulesBtn">Saya Mengerti →</button>
+      <h2>Aturan Peminjaman</h2>
+
+      <div class="rules-list">
+        <p>1. Isi data peminjam dengan benar.</p>
+        <p>2. Tunggu konfirmasi dari admin.</p>
+        <p>3. Jaga buku yang dipinjam dengan baik.</p>
+        <p>4. Kembalikan buku sesuai waktu yang disepakati.</p>
+      </div>
     </div>
   </div>
 
   <!-- MODAL DETAIL BUKU -->
-  <div class="modal-backdrop" id="detailModal" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-modal="true">
-      <button class="modal-close" id="closeDetailModal" aria-label="Tutup">&times;</button>
-      <span class="sub-eyebrow" id="detailModalCode">RB-00</span>
-      <h2 id="detailModalTitle" style="font-size: 24px; margin-block: 8px;">Judul Buku</h2>
-      <p id="detailModalAuthor" style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Penulis</p>
-      
-      <div class="selected-book-badge" id="detailModalGenre">Genre</div>
-      <p id="detailModalDesc" style="font-size: 13px; line-height: 1.6; margin-bottom: 16px;">Deskripsi buku...</p>
-      
-      <div class="meta-stats" style="margin-bottom: 20px; font-size: 11px;">
-        <span id="detailModalLikes">❤️ 0</span>
-        <span id="detailModalFinished">✅ 0 selesai</span>
-        <span id="detailModalDuration">⏱️ 0j 0m</span>
-      </div>
+  <div class="modal" id="detailModal">
+    <div class="modal-content detail-content">
+      <button class="modal-close" data-close>×</button>
 
-      <button class="btn-primary full-width" id="modalBorrowFromDetailBtn">Ajukan Peminjaman →</button>
+      <img id="detailModalCover" src="" alt="Sampul buku">
+
+      <div id="detailModalInfo"></div>
     </div>
   </div>
 
-  <!-- TOAST NOTIFICATION -->
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <!-- NOTIFIKASI -->
+  <div class="toast" id="toast"></div>
 
+  <!-- JAVASCRIPT -->
   <script src="script.js"></script>
+
 </body>
 </html>
