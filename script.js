@@ -1,4 +1,4 @@
-const ADMIN_WA = "085219454256";
+const ADMIN_WA = "6285219454256";
 
 // Data Koleksi Buku PUSTAKA LONTARA
 const books = [
@@ -129,7 +129,7 @@ if (menuToggle) {
   });
 }
 
-// Render Buku Utama, Buku Fisik, dan Koleksi Wishlist Sekaligus
+// Render Semua Bagian Buku
 function renderBooks() {
   renderCatalog();
   renderPhysicalBooks();
@@ -220,7 +220,7 @@ function renderPhysicalBooks() {
   }).join("");
 }
 
-// Fungsi untuk Toggle Like & Simpan ke Koleksi Anda
+// Fungsi Toggle Like & Simpan ke Koleksi Anda
 function toggleLike(e, id) {
   e.stopPropagation();
   const book = books.find(b => b.id === id);
@@ -237,12 +237,11 @@ function toggleLike(e, id) {
     showToast(`Buku dihapus dari Koleksi Anda.`);
   }
 
-  // Simpan ke localStorage
   localStorage.setItem("pustaka_liked_books", JSON.stringify(likedBookIds));
   renderBooks();
 }
 
-// Fungsi untuk Merender Daftar Buku di "Koleksi Buku Anda"
+// Render Daftar Buku di "Koleksi Buku Anda"
 function renderWishlist() {
   const wishlistGrid = document.getElementById("wishlistGrid");
   const emptyWishlistState = document.getElementById("emptyWishlistState");
@@ -283,7 +282,7 @@ function renderWishlist() {
   `).join("");
 }
 
-// Fungsi Buka Modal Detail Buku
+// Modal Detail Buku
 function openDetail(id) {
   const selected = books.find(b => b.id == id);
   if (!selected) return;
@@ -399,7 +398,7 @@ if (borrowForm) {
     
     window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`, "_blank");
     borrowModal.classList.remove("show");
-    showToast("Diteruskan ke WhatsApp Admin (085219454256)...");
+    showToast("Diteruskan ke WhatsApp Admin...");
   });
 }
 
