@@ -1095,3 +1095,294 @@ body.dark-mode .modal-close {
 body.dark-mode .admin-section{background:#293b2b}body.dark-mode .stat-card,body.dark-mode .admin-panel{background:#304332;border-color:#526b53}body.dark-mode .stat-card strong{color:#dce8d3}body.dark-mode .borrow-table th{background:#263a2b;color:#d3ddce}body.dark-mode .borrow-table td{border-color:#526b53}body.dark-mode .admin-tools input,body.dark-mode .admin-tools select,body.dark-mode .borrow-table select{background:#263a2b;color:white;border-color:#526b53}body.dark-mode .admin-note{background:#263a2b;color:#d3ddce}
 @media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}.navbar nav{gap:12px}}
 @media(max-width:650px){.admin-heading{align-items:flex-start;flex-direction:column}.admin-tools{flex-direction:column}.stats-grid{gap:10px}.stat-card{padding:16px}.stat-card strong{font-size:25px}}
+
+
+/* ==========================================================
+   MOBILE REFINEMENT — PUSTAKA LONTARA
+   Desktop styling and original sage/ivory identity retained.
+   Mobile layout is reorganized to follow the supplied reference.
+========================================================== */
+
+/* Keep the desktop layout intact; these rules apply only to phones. */
+@media (max-width: 650px) {
+  html { scroll-padding-top: 76px; }
+  body {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+    overflow-x: hidden;
+  }
+
+  .navbar {
+    min-height: 68px;
+    height: 68px;
+    padding: 8px 16px;
+    gap: 8px;
+    display: flex;
+    position: sticky;
+    top: 0;
+    background: var(--ivory);
+    box-shadow: 0 2px 12px rgba(30, 45, 30, .07);
+  }
+  .logo { gap: 8px; min-width: 0; }
+  .logo-icon { font-size: 29px; }
+  .logo strong { font-size: 14px; line-height: 1; }
+  .logo small { font-size: 8px; margin-top: 3px; }
+  .nav-actions { margin-left: auto; gap: 5px; }
+  .theme-btn { font-size: 19px; padding: 6px; }
+  .login-btn { display: none !important; }
+  .menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    font-size: 21px;
+    border-radius: 50%;
+    background: var(--sage-light);
+  }
+  .navbar nav {
+    display: none;
+    position: absolute;
+    top: 68px;
+    left: 10px;
+    right: 10px;
+    padding: 12px 16px;
+    border: 1px solid rgba(90,110,75,.12);
+    border-radius: 14px;
+    background: var(--ivory);
+    box-shadow: 0 12px 30px rgba(20,35,20,.14);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    z-index: 150;
+  }
+  .navbar nav.open { display: flex; }
+  .navbar nav a {
+    padding: 11px 4px;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(90,110,75,.10);
+  }
+  .navbar nav a:last-child { border-bottom: 0; }
+
+  /* Bottom app navigation similar to the reference, without changing desktop. */
+  .mobile-bottom-nav {
+    position: fixed;
+    z-index: 300;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-height: 66px;
+    padding: 7px 8px calc(7px + env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    background: rgba(250,249,241,.97);
+    border-top: 1px solid rgba(90,110,75,.13);
+    box-shadow: 0 -5px 20px rgba(35,45,30,.07);
+    backdrop-filter: blur(12px);
+  }
+  .mobile-bottom-nav a {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: #92998e;
+    font-size: 9px;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1.2;
+  }
+  .mobile-bottom-nav a .mobile-nav-icon { font-size: 19px; line-height: 1; }
+  .mobile-bottom-nav a.active { color: var(--sage-dark); }
+  .mobile-bottom-nav a.active .mobile-nav-icon { transform: translateY(-1px); }
+  body.dark-mode .mobile-bottom-nav {
+    background: rgba(32,47,36,.97);
+    border-color: #526b53;
+  }
+  body.dark-mode .mobile-bottom-nav a { color: #aab7a5; }
+  body.dark-mode .mobile-bottom-nav a.active { color: #e2edda; }
+
+  .section { padding: 32px 16px; }
+  .section h2 {
+    text-align: left;
+    font-size: 25px;
+    line-height: 1.2;
+    margin: 9px 0 7px;
+  }
+  .section-desc {
+    text-align: left;
+    font-size: 12px;
+    margin-bottom: 18px;
+  }
+
+  /* Keep the original hero design, just stack it neatly on phones. */
+  .hero { grid-template-columns: 1fr; }
+  .hero-content { padding: 32px 18px 25px; }
+  .hero h1 { font-size: clamp(30px, 8vw, 38px); margin: 15px 0; }
+  .hero-content > p { font-size: 13px; line-height: 1.65; }
+  .hero-buttons { gap: 9px; margin-top: 18px; }
+  .hero-image { min-height: 210px; height: 210px; }
+  .hero-stats { margin-top: 22px; gap: 10px; }
+  .hero-stats div { padding-right: 10px; }
+  .hero-stats strong { font-size: 13px; }
+  .hero-stats span { font-size: 9px; }
+
+  .category-grid {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 2px 1px 10px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .category-grid::-webkit-scrollbar { display: none; }
+  .category-card {
+    flex: 0 0 112px;
+    min-height: 112px;
+    padding: 13px 11px;
+    border-radius: 16px;
+    scroll-snap-align: start;
+  }
+  .category-card span { font-size: 24px; margin-bottom: 8px; }
+  .category-card strong { font-size: 13px; }
+  .category-card small { font-size: 9px; line-height: 1.35; }
+
+  /* Search field and filter chips become compact and horizontally scrollable. */
+  .filter-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 18px 0 12px;
+  }
+  .filter-bar input {
+    min-height: 42px;
+    border-radius: 24px;
+    padding: 10px 15px;
+    font-size: 12px;
+  }
+  .filter-bar select {
+    min-height: 38px;
+    padding: 8px 12px;
+    font-size: 11px;
+    border-radius: 20px;
+  }
+  .filter-options {
+    display: block;
+    overflow: visible;
+  }
+  .filter-options > div {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 7px;
+    padding: 2px 1px 8px;
+    margin-bottom: 5px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-options > div::-webkit-scrollbar { display: none; }
+  .filter-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-size: 10px;
+    padding: 7px 12px;
+    border-radius: 18px;
+  }
+  .book-count { font-size: 10px; margin: 8px 0 10px; }
+
+  /* Two-column book covers on every phone width, including narrow phones. */
+  .book-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px;
+    align-items: start;
+  }
+  .book-card {
+    min-width: 0;
+    border-radius: 13px;
+    overflow: hidden;
+    box-shadow: 0 3px 13px rgba(50,70,40,.08);
+  }
+  .book-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+  .book-card-content { padding: 8px 9px 10px; }
+  .book-category { font-size: 8px; padding: 3px 7px; }
+  .book-card-content h3 {
+    font-size: 12px;
+    line-height: 1.3;
+    margin: 5px 0 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 31px;
+  }
+  .book-card-content p {
+    font-size: 9px;
+    line-height: 1.35;
+    margin-bottom: 4px;
+  }
+  .book-card button {
+    font-size: 9px;
+    padding: 8px 5px;
+    margin-top: 5px;
+    border-radius: 8px;
+  }
+  .book-card button + button { margin-top: 5px; }
+
+  .wishlist-section, .catalog { min-height: 75vh; }
+  .about-section { grid-template-columns: 1fr; gap: 18px; }
+  .about-image img { height: 210px; }
+  .about-content h2 { font-size: 27px; text-align: left; }
+  .about-content p { font-size: 13px; line-height: 1.65; }
+
+  .footer {
+    grid-template-columns: 1fr 1fr;
+    padding: 30px 18px 20px;
+    gap: 18px;
+  }
+  .footer > div:first-child { grid-column: 1 / -1; }
+  .footer h3 { font-size: 15px; }
+  .footer h4 { font-size: 12px; }
+  .footer p, .footer a { font-size: 10px; }
+
+  .admin-heading { align-items: flex-start; flex-direction: column; }
+  .stats-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
+  .stat-card { padding: 13px; border-radius: 13px; }
+  .stat-card span { font-size: 20px; }
+  .stat-card small { font-size: 10px; }
+  .stat-card strong { font-size: 23px; }
+  .admin-panel { padding: 12px; border-radius: 14px; }
+  .admin-tools { flex-direction: column; gap: 8px; }
+  .admin-tools input, .admin-tools select { width: 100%; min-height: 40px; }
+  .table-wrap { overflow-x: auto; }
+  .borrow-table { min-width: 650px; }
+  .admin-note { font-size: 10px; }
+
+  .modal { padding: 12px; }
+  .modal-content { padding: 22px 18px; border-radius: 16px; max-height: 84vh; }
+  .toast { bottom: 82px; font-size: 11px; }
+}
+
+/* On small phones, preserve the reference's two-column book layout. */
+@media (max-width: 380px) {
+  .book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .book-card img { height: auto; aspect-ratio: 3 / 4; }
+  .category-grid { display: flex; }
+  .category-card { flex-basis: 104px; min-height: 108px; }
+  .section { padding-left: 13px; padding-right: 13px; }
+}
+
+/* Avoid accidental horizontal overflow from long labels or tables. */
+@media (max-width: 650px) {
+  img, video, iframe { max-width: 100%; }
+  .page-section, main, .section { min-width: 0; }
+  .book-card-content, .book-card-content h3 { overflow-wrap: anywhere; }
+}

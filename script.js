@@ -211,3 +211,27 @@ $("#exportBorrow")?.addEventListener("click",()=>{
 });
 const params=new URLSearchParams(location.search); if(params.get("kategori")){selectedGenre=params.get("kategori");$$("[data-genre]").forEach(b=>b.classList.toggle("active",b.dataset.genre===selectedGenre));}
 renderCatalog();renderPhysical();renderWishlist();renderAdmin();updateLogin();
+
+
+/* Mobile bottom navigation: only rendered on small screens via CSS. */
+(function addMobileBottomNavigation() {
+  if (document.querySelector(".mobile-bottom-nav")) return;
+  const current = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+  const links = [
+    { href: "index.html", label: "Beranda", icon: "⌂", files: ["", "index.html", "index(1).html"] },
+    { href: "katalog.html", label: "Katalog", icon: "▤", files: ["katalog.html"] },
+    { href: "koleksi.html", label: "Favorit", icon: "♡", files: ["koleksi.html"] },
+    { href: "admin.html", label: "Admin", icon: "♙", files: ["admin.html", "admin(1).html"] }
+  ];
+  const nav = document.createElement("nav");
+  nav.className = "mobile-bottom-nav";
+  nav.setAttribute("aria-label", "Navigasi utama");
+  nav.innerHTML = links.map(item => {
+    const active = item.files.includes(current);
+    return `<a href="${item.href}" class="${active ? "active" : ""}" ${active ? 'aria-current="page"' : ""}>
+      <span class="mobile-nav-icon" aria-hidden="true">${item.icon}</span>
+      <span>${item.label}</span>
+    </a>`;
+  }).join("");
+  document.body.appendChild(nav);
+})();
