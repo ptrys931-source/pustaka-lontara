@@ -75,6 +75,9 @@ let wishlist = read("pustakaWishlist", []);
 let currentUser = read("pustakaUser", null);
 let selectedBookId = null;
 let selectedGenre = "Semua", selectedType = "Semua";
+const initialParams = new URLSearchParams(window.location.search);
+const initialSearch = initialParams.get("q") || "";
+if (initialParams.get("kategori")) selectedGenre = initialParams.get("kategori");
 const ADMIN_WA = "628xxxxxxxxxx";
 const borrowKey = "pustakaBorrowRequests";
 let borrowRequests = read(borrowKey, []);
@@ -101,14 +104,20 @@ function bookCard(book, compact=false) {
 }
 function renderCatalog() {
   const grid=$("#bookGrid"); if(!grid) return;
-  const keyword=($("#searchInput")?.value||"").toLowerCase().trim();
-  let list=books.filter(b=>(b.title.toLowerCase().includes(keyword)||b.author.toLowerCase().includes(keyword)) &&
-    (selectedGenre==="Semua"||b.category===selectedGenre) && (selectedType==="Semua"||b.type===selectedType));
+  const keyword=($("#searchInput")?.value||"").toLocaleLowerCase("id-ID").trim();
+  let list=books.filter(b=>{
+    const searchable=[b.title,b.author,b.category,b.type,b.description].join(" ").toLocaleLowerCase("id-ID");
+    return (!keyword || searchable.includes(keyword)) &&
+      (selectedGenre==="Semua"||b.category===selectedGenre) &&
+      (selectedType==="Semua"||b.type===selectedType);
+  });
   const sort=$("#sortSelect")?.value;
   if(sort==="az") list.sort((a,b)=>a.title.localeCompare(b.title));
   if(sort==="za") list.sort((a,b)=>b.title.localeCompare(a.title));
   grid.innerHTML=list.map(b=>bookCard(b)).join("");
-  if($("#bookCount")) $("#bookCount").textContent=`Menampilkan ${list.length} dari ${books.length} buku`;
+  if($("#bookCount")) $("#bookCount").textContent=keyword
+    ? `Ditemukan ${list.length} buku untuk “${$("#searchInput").value.trim()}”`
+    : `Menampilkan ${list.length} dari ${books.length} buku`;
   if($("#emptyState")) $("#emptyState").style.display=list.length?"none":"block";
 }
 function renderPhysical() {
@@ -154,7 +163,9 @@ function renderAdmin() {
     <td><span class="status status-${r.status.toLowerCase()}">${r.status}</span></td>
     <td><select aria-label="Ubah status" onchange="updateBorrowStatus('${r.id}',this.value)">
       ${["Menunggu","Disetujui","Dikembalikan"].map(s=>`<option ${r.status===s?"selected":""}>${s}</option>`).join("")}
-    </select></td></tr>`).join(""):`<tr><td colspan="5" class="table-empty">Belum ada data peminjaman.</td></tr>`;
+    </select></td>
+    <td><button type="button" class="delete-borrow-btn" onclick="deleteBorrowRequest('${r.id}')" aria-label="Hapus permintaan ${escapeHTML(r.book)}">Hapus</button></td>
+    </tr>`).join(""):`<tr><td colspan="6" class="table-empty">Belum ada data peminjaman.</td></tr>`;
   $("#statTotal") && ($("#statTotal").textContent=books.length);
   $("#statBorrow") && ($("#statBorrow").textContent=borrowRequests.length);
   $("#statWaiting") && ($("#statWaiting").textContent=borrowRequests.filter(r=>r.status==="Menunggu").length);
@@ -164,13 +175,39 @@ function updateBorrowStatus(id,status) {
   borrowRequests=read(borrowKey,[]).map(r=>r.id===id?{...r,status}:r);
   write(borrowKey,borrowRequests); renderAdmin(); toast("Status peminjaman diperbarui.");
 }
+function deleteBorrowRequest(id) {
+  const current = read(borrowKey, []);
+  const request = current.find(r => String(r.id) === String(id));
+  if (!request) { toast("Data peminjaman tidak ditemukan."); return; }
+  const approved = window.confirm(`Batalkan dan hapus permintaan peminjaman buku "${request.book}" atas nama ${request.name}?\n\nData yang dihapus tidak dapat dipulihkan.`);
+  if (!approved) return;
+  borrowRequests = current.filter(r => String(r.id) !== String(id));
+  write(borrowKey, borrowRequests);
+  renderAdmin();
+  toast("Permintaan peminjaman berhasil dihapus.");
+}
 function escapeHTML(s) { return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
-$("#searchInput")?.addEventListener("input",renderCatalog);
+if ($("#searchInput")) {
+  $("#searchInput").value = initialSearch;
+  $("#searchInput").addEventListener("input",renderCatalog);
+}
+$("#clearSearch")?.addEventListener("click",()=>{
+  if($("#searchInput")) { $("#searchInput").value=""; $("#searchInput").focus(); }
+  renderCatalog();
+});
+$("#homeSearchForm")?.addEventListener("submit",e=>{
+  e.preventDefault();
+  const q=$("#homeSearchInput")?.value.trim()||"";
+  location.href="katalog.html"+(q?"?q="+encodeURIComponent(q):"");
+});
 $("#sortSelect")?.addEventListener("change",renderCatalog);
-$$("[data-genre]").forEach(btn=>btn.addEventListener("click",()=>{
+$$("[data-genre]").forEach(btn=>{
+  btn.classList.toggle("active",btn.dataset.genre===selectedGenre);
+  btn.addEventListener("click",()=>{
   selectedGenre=btn.dataset.genre; $$("[data-genre]").forEach(x=>x.classList.toggle("active",x===btn)); renderCatalog();
-}));
+  });
+});
 $$("[data-type]").forEach(btn=>btn.addEventListener("click",()=>{
   selectedType=btn.dataset.type; $$("[data-type]").forEach(x=>x.classList.toggle("active",x===btn)); renderCatalog();
 }));
