@@ -1,17 +1,4 @@
-
-// =====================================
-// PUSTAKA LONTARA
-// JAVASCRIPT WEBSITE PERPUSTAKAAN
-// =====================================
-
-// Ganti dengan nomor WhatsApp admin.
-// Gunakan kode negara 62, tanpa tanda +.
-const ADMIN_WA = "628xxxxxxxxxx";
-
-// =====================================
-// DATA BUKU
-// =====================================
-
+// PUSTAKA LONTARA — shared multi-page experience
 const books = [
   {
     id: 1,
@@ -80,583 +67,147 @@ const books = [
     link: ""
   }
 ];
-
-// =====================================
-// VARIABEL
-// =====================================
-
-let selectedGenre = "Semua";
-let selectedType = "Semua";
+const $ = (s, root=document) => root.querySelector(s);
+const $$ = (s, root=document) => [...root.querySelectorAll(s)];
+const read = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
+const write = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+let wishlist = read("pustakaWishlist", []);
+let currentUser = read("pustakaUser", null);
 let selectedBookId = null;
+let selectedGenre = "Semua", selectedType = "Semua";
+const ADMIN_WA = "628xxxxxxxxxx";
+const borrowKey = "pustakaBorrowRequests";
+let borrowRequests = read(borrowKey, []);
 
-let wishlist = JSON.parse(
-  localStorage.getItem("pustakaWishlist") || "[]"
-);
-
-let currentUser = JSON.parse(
-  localStorage.getItem("pustakaUser") || "null"
-);
-
-// =====================================
-// FORMAT RATING
-// =====================================
-
-function ratingHTML(rating) {
-  return `⭐ ${rating} / 5`;
+function toast(message) {
+  const el = $("#toast");
+  if (!el) return;
+  el.textContent = message; el.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => el.classList.remove("show"), 2800);
 }
-
-// =====================================
-// MENAMPILKAN BUKU
-// =====================================
-
-function renderBooks() {
-  const bookGrid = document.getElementById("bookGrid");
-  const searchInput = document.getElementById("searchInput");
-  const sortSelect = document.getElementById("sortSelect");
-  const emptyState = document.getElementById("emptyState");
-  const bookCount = document.getElementById("bookCount");
-
-  if (!bookGrid) return;
-
-  const keyword = searchInput.value.toLowerCase().trim();
-
-  let filteredBooks = books.filter(book => {
-    const matchSearch =
-      book.title.toLowerCase().includes(keyword) ||
-      book.author.toLowerCase().includes(keyword);
-
-    const matchGenre =
-      selectedGenre === "Semua" ||
-      book.category === selectedGenre;
-
-    const matchType =
-      selectedType === "Semua" ||
-      book.type === selectedType;
-
-    return matchSearch && matchGenre && matchType;
-  });
-
-  if (sortSelect.value === "az") {
-    filteredBooks.sort((a, b) =>
-      a.title.localeCompare(b.title)
-    );
-  }
-
-  if (sortSelect.value === "za") {
-    filteredBooks.sort((a, b) =>
-      b.title.localeCompare(a.title)
-    );
-  }
-
-  bookCount.textContent =
-    `Menampilkan ${filteredBooks.length} buku`;
-
-  if (filteredBooks.length === 0) {
-    bookGrid.innerHTML = "";
-    emptyState.style.display = "block";
-    return;
-  }
-
-  emptyState.style.display = "none";
-
-  bookGrid.innerHTML = filteredBooks.map(book => `
-    <article class="book-card">
-      <img
-        src="${book.image}"
-        alt="Sampul ${book.title}"
-        loading="lazy"
-        onclick="showDetail(${book.id})"
-      >
-
-      <div class="book-card-content">
-        <span class="book-category">${book.category}</span>
-
-        <h3>${book.title}</h3>
-
-        <p>Penulis: ${book.author}</p>
-
-        <p>${ratingHTML(book.rating)}</p>
-
-        <p>Jenis: ${book.type}</p>
-
-        <button onclick="showDetail(${book.id})">
-          Lihat Detail
-        </button>
-
-        <button onclick="toggleWishlist(${book.id})">
-          ${wishlist.includes(book.id) ? "♥ Hapus Favorit" : "♡ Simpan Favorit"}
-        </button>
-
-        <button onclick="openBorrow(${book.id})">
-          Pinjam Buku
-        </button>
-      </div>
-    </article>
-  `).join("");
+function showModal(id) { const el=$("#"+id); if(el) el.classList.add("show"); }
+function closeModal(id) { const el=$("#"+id); if(el) el.classList.remove("show"); }
+function bookCard(book, compact=false) {
+  return `<article class="book-card">
+    <img src="${book.image}" alt="Sampul ${book.title}" loading="lazy" onclick="showDetail(${book.id})">
+    <div class="book-card-content">
+      <span class="book-category">${book.category}</span><h3>${book.title}</h3>
+      <p>Penulis: ${book.author}</p><p>⭐ ${book.rating} / 5 · ${book.type}</p>
+      <button onclick="showDetail(${book.id})">Lihat Detail</button>
+      <button class="btn-soft" onclick="toggleWishlist(${book.id})">${wishlist.includes(book.id)?"♥ Hapus Favorit":"♡ Simpan Favorit"}</button>
+      ${!compact ? `<button onclick="openBorrow(${book.id})">${book.type==="Fisik"?"Ajukan Peminjaman":"Pinjam Buku"}</button>`:""}
+    </div></article>`;
 }
-
-// =====================================
-// MENAMPILKAN BUKU FISIK
-// =====================================
-
-function renderPhysicalBooks() {
-  const container = document.getElementById("physicalBookGrid");
-
-  if (!container) return;
-
-  const physicalBooks = books.filter(
-    book => book.type === "Fisik"
-  );
-
-  container.innerHTML = physicalBooks.map(book => `
-    <article class="book-card">
-      <img
-        src="${book.image}"
-        alt="Sampul ${book.title}"
-        loading="lazy"
-        onclick="showDetail(${book.id})"
-      >
-
-      <div class="book-card-content">
-        <span class="book-category">Buku Fisik</span>
-        <h3>${book.title}</h3>
-        <p>Penulis: ${book.author}</p>
-        <p>${ratingHTML(book.rating)}</p>
-
-        <button onclick="showDetail(${book.id})">
-          Lihat Detail
-        </button>
-
-        <button onclick="openBorrow(${book.id})">
-          Ajukan Peminjaman
-        </button>
-      </div>
-    </article>
-  `).join("");
+function renderCatalog() {
+  const grid=$("#bookGrid"); if(!grid) return;
+  const keyword=($("#searchInput")?.value||"").toLowerCase().trim();
+  let list=books.filter(b=>(b.title.toLowerCase().includes(keyword)||b.author.toLowerCase().includes(keyword)) &&
+    (selectedGenre==="Semua"||b.category===selectedGenre) && (selectedType==="Semua"||b.type===selectedType));
+  const sort=$("#sortSelect")?.value;
+  if(sort==="az") list.sort((a,b)=>a.title.localeCompare(b.title));
+  if(sort==="za") list.sort((a,b)=>b.title.localeCompare(a.title));
+  grid.innerHTML=list.map(b=>bookCard(b)).join("");
+  if($("#bookCount")) $("#bookCount").textContent=`Menampilkan ${list.length} dari ${books.length} buku`;
+  if($("#emptyState")) $("#emptyState").style.display=list.length?"none":"block";
 }
-
-// =====================================
-// DETAIL BUKU
-// =====================================
-
-function showDetail(id) {
-  const book = books.find(item => item.id === id);
-
-  if (!book) return;
-
-  const modal = document.getElementById("detailModal");
-  const cover = document.getElementById("detailModalCover");
-  const info = document.getElementById("detailModalInfo");
-
-  cover.src = book.image;
-  cover.alt = "Sampul " + book.title;
-
-  info.innerHTML = `
-    <span class="book-category">${book.category}</span>
-    <h2>${book.title}</h2>
-    <p><strong>Penulis:</strong> ${book.author}</p>
-    <p><strong>Jenis:</strong> ${book.type}</p>
-    <p><strong>Rating:</strong> ${ratingHTML(book.rating)}</p>
-    <p>${book.description}</p>
-
-    ${book.link ? `
-      <a class="btn-primary" href="${book.link}" target="_blank" rel="noopener">
-        Baca Buku
-      </a>
-    ` : `
-      <p class="detail-notice">
-        Link bacaan belum tersedia.
-      </p>
-    `}
-
-    <button class="btn-primary" onclick="openBorrow(${book.id})">
-      Pinjam Buku
-    </button>
-  `;
-
-  modal.classList.add("show");
+function renderPhysical() {
+  const grid=$("#physicalBookGrid"); if(grid) grid.innerHTML=books.filter(b=>b.type==="Fisik").map(b=>bookCard(b)).join("");
 }
-
-// =====================================
-// KOLEKSI FAVORIT
-// =====================================
-
-function toggleWishlist(id) {
-  if (wishlist.includes(id)) {
-    wishlist = wishlist.filter(item => item !== id);
-    showToast("Buku dihapus dari favorit.");
-  } else {
-    wishlist.push(id);
-    showToast("Buku berhasil disimpan!");
-  }
-
-  localStorage.setItem(
-    "pustakaWishlist",
-    JSON.stringify(wishlist)
-  );
-
-  renderBooks();
-  renderWishlist();
-  renderPhysicalBooks();
-}
-
 function renderWishlist() {
-  const container = document.getElementById("wishlistGrid");
-  const empty = document.getElementById("emptyWishlistState");
-
-  if (!container) return;
-
-  const favoriteBooks = books.filter(
-    book => wishlist.includes(book.id)
-  );
-
-  if (favoriteBooks.length === 0) {
-    container.innerHTML = "";
-    empty.style.display = "block";
-    return;
-  }
-
-  empty.style.display = "none";
-
-  container.innerHTML = favoriteBooks.map(book => `
-    <article class="book-card">
-      <img src="${book.image}" alt="${book.title}" loading="lazy">
-
-      <div class="book-card-content">
-        <h3>${book.title}</h3>
-        <p>${book.author}</p>
-
-        <button onclick="showDetail(${book.id})">
-          Lihat Detail
-        </button>
-
-        <button onclick="toggleWishlist(${book.id})">
-          ♥ Hapus Favorit
-        </button>
-      </div>
-    </article>
-  `).join("");
+  const grid=$("#wishlistGrid"); if(!grid) return;
+  const list=books.filter(b=>wishlist.includes(b.id));
+  grid.innerHTML=list.map(b=>bookCard(b,true)).join("");
+  if($("#emptyWishlistState")) $("#emptyWishlistState").style.display=list.length?"none":"block";
 }
-
-// =====================================
-// PEMINJAMAN BUKU
-// =====================================
-
+function toggleWishlist(id) {
+  wishlist=wishlist.includes(id)?wishlist.filter(x=>x!==id):[...wishlist,id];
+  write("pustakaWishlist",wishlist); renderCatalog(); renderPhysical(); renderWishlist();
+  toast(wishlist.includes(id)?"Buku ditambahkan ke koleksi favorit.":"Buku dihapus dari favorit.");
+}
+function showDetail(id) {
+  const b=books.find(x=>x.id===id); if(!b)return;
+  $("#detailModalCover").src=b.image;
+  $("#detailModalInfo").innerHTML=`<span class="book-category">${b.category}</span><h2>${b.title}</h2>
+  <p><strong>Penulis:</strong> ${b.author}</p><p><strong>Jenis:</strong> ${b.type}</p>
+  <p><strong>Rating:</strong> ⭐ ${b.rating}/5</p><p>${b.description}</p>
+  ${b.link?`<a class="btn-primary" href="${b.link}" target="_blank" rel="noopener">Baca Buku</a>`:`<p class="detail-notice">Link bacaan belum tersedia.</p>`}
+  <button class="btn-primary" onclick="openBorrow(${b.id})">Ajukan Peminjaman</button>`;
+  showModal("detailModal");
+}
 function openBorrow(id) {
-  const book = books.find(item => item.id === id);
-
-  if (!book) return;
-
-  selectedBookId = id;
-
-  document.getElementById("selectedBookBadge").innerHTML = `
-    <p>Buku yang dipilih:</p>
-    <strong>${book.title}</strong>
-    <p>Jenis: ${book.type}</p>
-  `;
-
-  closeModal("detailModal");
-  document.getElementById("borrowModal").classList.add("show");
+  selectedBookId=id; const b=books.find(x=>x.id===id); if(!b)return;
+  $("#selectedBookBadge").innerHTML=`<p>Buku yang dipilih</p><strong>${b.title}</strong><p>${b.author} · ${b.type}</p>`;
+  if(currentUser && $("#borrowName")) $("#borrowName").value=currentUser.name;
+  closeModal("detailModal"); showModal("borrowModal");
 }
-
-document.getElementById("borrowForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const book = books.find(item => item.id === selectedBookId);
-
-  if (!book) {
-    showToast("Silakan pilih buku terlebih dahulu.");
-    return;
-  }
-
-  const name = document.getElementById("borrowName").value.trim();
-  const phone = document.getElementById("borrowPhone").value.trim();
-  const address = document.getElementById("borrowAddress").value.trim();
-
-  if (!name || !phone || !address) {
-    showToast("Lengkapi semua data peminjaman.");
-    return;
-  }
-
-  const message = `
-PERMINTAAN PEMINJAMAN BUKU
---------------------------
-Nama: ${name}
-Nomor HP: ${phone}
-Alamat: ${address}
-
-Judul Buku: ${book.title}
-Penulis: ${book.author}
-Jenis: ${book.type}
-
-Mohon konfirmasi ketersediaan buku.
-  `;
-
-  const adminNumber = ADMIN_WA.replace(/\D/g, "");
-
-  if (!/^62\d{8,15}$/.test(adminNumber)) {
-    showToast("Atur nomor WhatsApp admin di script.js terlebih dahulu.");
-    return;
-  }
-
-  const whatsappURL =
-    "https://wa.me/" + adminNumber +
-    "?text=" + encodeURIComponent(message);
-
-  window.open(whatsappURL, "_blank");
-
-  this.reset();
-  closeModal("borrowModal");
-  showToast("Permintaan siap dikirim melalui WhatsApp.");
-});
-
-// =====================================
-// PENCARIAN
-// =====================================
-
-document.getElementById("searchInput").addEventListener("input", renderBooks);
-
-// =====================================
-// PENGURUTAN
-// =====================================
-
-document.getElementById("sortSelect").addEventListener("change", renderBooks);
-
-// =====================================
-// FILTER KATEGORI
-// =====================================
-
-document.querySelectorAll("[data-genre]").forEach(button => {
-  button.addEventListener("click", function() {
-    selectedGenre = this.dataset.genre;
-
-    document.querySelectorAll("[data-genre]").forEach(btn => {
-      btn.classList.remove("active");
-    });
-
-    this.classList.add("active");
-    renderBooks();
-
-    document.getElementById("katalog").scrollIntoView({
-      behavior: "smooth"
-    });
-  });
-});
-
-// =====================================
-// FILTER JENIS BUKU
-// =====================================
-
-document.querySelectorAll("[data-type]").forEach(button => {
-  button.addEventListener("click", function() {
-    selectedType = this.dataset.type;
-
-    document.querySelectorAll("[data-type]").forEach(btn => {
-      btn.classList.remove("active");
-    });
-
-    this.classList.add("active");
-    renderBooks();
-  });
-});
-
-// =====================================
-// KARTU KATEGORI BERANDA
-// =====================================
-
-document.querySelectorAll(".category-card").forEach(button => {
-  button.addEventListener("click", function() {
-    selectedGenre = this.dataset.category;
-
-    document.querySelectorAll("[data-genre]").forEach(btn => {
-      btn.classList.toggle(
-        "active",
-        btn.dataset.genre === selectedGenre
-      );
-    });
-
-    renderBooks();
-
-    document.getElementById("katalog").scrollIntoView({
-      behavior: "smooth"
-    });
-  });
-});
-
-// =====================================
-// MENU HAMBURGER HP
-// =====================================
-
-const menuToggle = document.getElementById("menuToggle");
-const navMenu = document.getElementById("navMenu");
-
-menuToggle.addEventListener("click", function() {
-  navMenu.classList.toggle("open");
-
-  menuToggle.textContent =
-    navMenu.classList.contains("open") ? "✕" : "☰";
-});
-
-document.querySelectorAll("#navMenu a").forEach(link => {
-  link.addEventListener("click", function() {
-    navMenu.classList.remove("open");
-    menuToggle.textContent = "☰";
-  });
-});
-
-// =====================================
-// LOGIN SIMULASI
-// =====================================
-
-document.getElementById("loginBtn").addEventListener("click", function() {
-  document.getElementById("loginModal").classList.add("show");
-});
-
-document.getElementById("loginForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const name = document.getElementById("loginName").value.trim();
-  const email = document.getElementById("loginEmail").value.trim();
-
-  currentUser = { name, email };
-
-  localStorage.setItem(
-    "pustakaUser",
-    JSON.stringify(currentUser)
-  );
-
-  closeModal("loginModal");
-
-  document.getElementById("loginBtn").textContent =
-    "Halo, " + name.split(" ")[0];
-
-  this.reset();
-  showToast("Berhasil masuk sebagai " + name);
-});
-
-// =====================================
-// DAFTAR SIMULASI
-// =====================================
-
-document.getElementById("registerBtn").addEventListener("click", function(e) {
-  e.preventDefault();
-  showToast("Fitur pendaftaran belum terhubung ke database.");
-});
-
-// =====================================
-// ATURAN PEMINJAMAN
-// =====================================
-
-document.getElementById("footerRules").addEventListener("click", function(e) {
-  e.preventDefault();
-  document.getElementById("rulesModal").classList.add("show");
-});
-
-// =====================================
-// MODE GELAP
-// =====================================
-
-const themeToggle = document.getElementById("themeToggle");
-
-if (localStorage.getItem("pustakaTheme") === "dark") {
-  document.body.classList.add("dark-mode");
-  themeToggle.textContent = "☀";
+function renderAdmin() {
+  const tbody=$("#borrowTableBody"); if(!tbody)return;
+  borrowRequests=read(borrowKey,[]);
+  const q=($("#adminSearch")?.value||"").toLowerCase();
+  const status=$("#statusFilter")?.value||"Semua";
+  const list=borrowRequests.filter(r=>(r.name+" "+r.book+" "+r.phone).toLowerCase().includes(q)&&(status==="Semua"||r.status===status));
+  tbody.innerHTML=list.length?list.map(r=>`<tr>
+    <td><strong>${escapeHTML(r.name)}</strong><small>${escapeHTML(r.phone)}</small></td>
+    <td>${escapeHTML(r.book)}<small>${escapeHTML(r.type)}</small></td>
+    <td>${escapeHTML(r.date)}</td>
+    <td><span class="status status-${r.status.toLowerCase()}">${r.status}</span></td>
+    <td><select aria-label="Ubah status" onchange="updateBorrowStatus('${r.id}',this.value)">
+      ${["Menunggu","Disetujui","Dikembalikan"].map(s=>`<option ${r.status===s?"selected":""}>${s}</option>`).join("")}
+    </select></td></tr>`).join(""):`<tr><td colspan="5" class="table-empty">Belum ada data peminjaman.</td></tr>`;
+  $("#statTotal") && ($("#statTotal").textContent=books.length);
+  $("#statBorrow") && ($("#statBorrow").textContent=borrowRequests.length);
+  $("#statWaiting") && ($("#statWaiting").textContent=borrowRequests.filter(r=>r.status==="Menunggu").length);
+  $("#statUsers") && ($("#statUsers").textContent=new Set(borrowRequests.map(r=>r.phone)).size);
 }
-
-themeToggle.addEventListener("click", function() {
-  document.body.classList.toggle("dark-mode");
-
-  const isDark = document.body.classList.contains("dark-mode");
-
-  themeToggle.textContent = isDark ? "☀" : "☾";
-
-  localStorage.setItem(
-    "pustakaTheme",
-    isDark ? "dark" : "light"
-  );
-});
-
-// =====================================
-// FAKTA MENARIK
-// =====================================
-
-const facts = [
-  "Membaca buku dapat menambah wawasan dan pengetahuan.",
-  "Buku adalah salah satu sumber informasi yang telah digunakan selama berabad-abad.",
-  "Membaca dapat membantu meningkatkan kemampuan berbahasa.",
-  "Setiap buku memiliki cerita dan pengetahuan yang berbeda."
-];
-
-let factIndex = 0;
-
-document.getElementById("funFactText").addEventListener("click", function() {
-  factIndex = (factIndex + 1) % facts.length;
-  this.textContent = facts[factIndex];
-});
-
-// =====================================
-// MODAL
-// =====================================
-
-function closeModal(id) {
-  const modal = document.getElementById(id);
-
-  if (modal) {
-    modal.classList.remove("show");
-  }
+function updateBorrowStatus(id,status) {
+  borrowRequests=read(borrowKey,[]).map(r=>r.id===id?{...r,status}:r);
+  write(borrowKey,borrowRequests); renderAdmin(); toast("Status peminjaman diperbarui.");
 }
+function escapeHTML(s) { return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
-document.querySelectorAll("[data-close]").forEach(button => {
-  button.addEventListener("click", function() {
-    const modal = this.closest(".modal");
-    if (modal) modal.classList.remove("show");
-  });
+$("#searchInput")?.addEventListener("input",renderCatalog);
+$("#sortSelect")?.addEventListener("change",renderCatalog);
+$$("[data-genre]").forEach(btn=>btn.addEventListener("click",()=>{
+  selectedGenre=btn.dataset.genre; $$("[data-genre]").forEach(x=>x.classList.toggle("active",x===btn)); renderCatalog();
+}));
+$$("[data-type]").forEach(btn=>btn.addEventListener("click",()=>{
+  selectedType=btn.dataset.type; $$("[data-type]").forEach(x=>x.classList.toggle("active",x===btn)); renderCatalog();
+}));
+$$(".category-card").forEach(btn=>btn.addEventListener("click",()=>location.href=`katalog.html?kategori=${encodeURIComponent(btn.dataset.category)}`));
+$("#borrowForm")?.addEventListener("submit",e=>{
+  e.preventDefault(); const b=books.find(x=>x.id===selectedBookId); if(!b)return;
+  const request={id:String(Date.now()),name:$("#borrowName").value.trim(),phone:$("#borrowPhone").value.trim(),
+    address:$("#borrowAddress").value.trim(),book:b.title,type:b.type,status:"Menunggu",
+    date:new Date().toLocaleDateString("id-ID")};
+  borrowRequests=read(borrowKey,[]); borrowRequests.unshift(request); write(borrowKey,borrowRequests);
+  const message=`PERMINTAAN PEMINJAMAN BUKU\nNama: ${request.name}\nNomor HP: ${request.phone}\nAlamat: ${request.address}\nBuku: ${b.title}\nJenis: ${b.type}`;
+  const wa=ADMIN_WA.replace(/\D/g,"");
+  if(/^62\d{8,15}$/.test(wa)) window.open("https://wa.me/"+wa+"?text="+encodeURIComponent(message),"_blank");
+  e.target.reset(); closeModal("borrowModal"); toast("Permintaan tersimpan. Admin dapat melihatnya di Dashboard.");
 });
-
-document.querySelectorAll(".modal").forEach(modal => {
-  modal.addEventListener("click", function(e) {
-    if (e.target === this) {
-      this.classList.remove("show");
-    }
-  });
+$("#loginBtn")?.addEventListener("click",()=>showModal("loginModal"));
+$("#loginForm")?.addEventListener("submit",e=>{
+  e.preventDefault(); currentUser={name:$("#loginName").value.trim(),email:$("#loginEmail").value.trim()};
+  write("pustakaUser",currentUser); closeModal("loginModal"); updateLogin(); toast("Selamat datang, "+currentUser.name+"!");
 });
-
-document.addEventListener("keydown", function(e) {
-  if (e.key === "Escape") {
-    document.querySelectorAll(".modal.show").forEach(modal => {
-      modal.classList.remove("show");
-    });
-  }
+function updateLogin(){if($("#loginBtn"))$("#loginBtn").textContent=currentUser?"Halo, "+currentUser.name.split(" ")[0]:"Masuk";}
+$("#registerBtn")?.addEventListener("click",e=>{e.preventDefault();toast("Pendaftaran akun belum terhubung ke server.");});
+$("#footerRules")?.addEventListener("click",e=>{e.preventDefault();showModal("rulesModal");});
+$("#themeToggle")?.addEventListener("click",()=>{
+  document.body.classList.toggle("dark-mode"); const dark=document.body.classList.contains("dark-mode");
+  $("#themeToggle").textContent=dark?"☀":"☾"; localStorage.setItem("pustakaTheme",dark?"dark":"light");
 });
-
-// =====================================
-// NOTIFIKASI TOAST
-// =====================================
-
-let toastTimer;
-
-function showToast(message) {
-  const toast = document.getElementById("toast");
-
-  toast.textContent = message;
-  toast.classList.add("show");
-
-  clearTimeout(toastTimer);
-
-  toastTimer = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3000);
-}
-
-// =====================================
-// MEMULIHKAN LOGIN
-// =====================================
-
-if (currentUser) {
-  document.getElementById("loginBtn").textContent =
-    "Halo, " + currentUser.name.split(" ")[0];
-}
-
-// =====================================
-// JALANKAN WEBSITE
-// =====================================
+if(localStorage.getItem("pustakaTheme")==="dark"){document.body.classList.add("dark-mode");if($("#themeToggle"))$("#themeToggle").textContent="☀";}
+$("#menuToggle")?.addEventListener("click",()=>{$("#navMenu")?.classList.toggle("open");});
+$$("#navMenu a").forEach(a=>a.addEventListener("click",()=>$("#navMenu")?.classList.remove("open")));
+$$("[data-close]").forEach(btn=>btn.addEventListener("click",()=>btn.closest(".modal")?.classList.remove("show")));
+$$(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show");}));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$$(".modal.show").forEach(m=>m.classList.remove("show"));});
+$("#adminSearch")?.addEventListener("input",renderAdmin); $("#statusFilter")?.addEventListener("change",renderAdmin);
+$("#exportBorrow")?.addEventListener("click",()=>{
+  const rows=read(borrowKey,[]); const csv=[["Nama","Telepon","Alamat","Buku","Jenis","Tanggal","Status"],...rows.map(r=>[r.name,r.phone,r.address,r.book,r.type,r.date,r.status])].map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}));a.download="data-peminjaman-pustaka-lontara.csv";a.click();URL.revokeObjectURL(a.href);
+});
+const params=new URLSearchParams(location.search); if(params.get("kategori")){selectedGenre=params.get("kategori");$$("[data-genre]").forEach(b=>b.classList.toggle("active",b.dataset.genre===selectedGenre));}
+renderCatalog();renderPhysical();renderWishlist();renderAdmin();updateLogin();
