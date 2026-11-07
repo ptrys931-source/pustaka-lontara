@@ -1,35 +1,29 @@
-PUSTAKA LONTARA — UPDATE LOGIN, ADMIN, LANGGANAN & DENDA
+PUSTAKA LONTARA — PERBAIKAN LOGIN, LANGGANAN, ADMIN, DAN DENDA
 
-FITUR YANG DITAMBAHKAN
-- Pengunjung wajib masuk atau membuat akun sebelum mengakses halaman website.
-- Tombol Masuk/Keluar terlihat di handphone.
-- Hak akses dashboard admin dibatasi untuk akun administrator.
-- Admin dapat mengubah status, membatalkan/menghapus permintaan pinjam yang keliru.
-- Dashboard menampilkan tanggal jatuh tempo dan estimasi denda.
-- Setelah admin menyetujui pinjaman, masa pinjam 7 hari dimulai.
-- Denda keterlambatan contoh: Rp2.000 per hari, dihitung sampai buku dikembalikan.
-- Halaman Langganan: Premium contoh Rp10.000/bulan; pengajuan diverifikasi admin secara manual.
-- Warna sage/ivory dan identitas desain Pustaka Lontara dipertahankan.
+Isi paket:
+- Gerbang login/daftar tampil sebelum halaman website terlihat.
+- Tampilan login khusus anggota dengan gaya modern dan responsif (inspirasi umum aplikasi baca, bukan salinan Wattpad).
+- 8 kartu buku katalog (dua judul contoh tambahan).
+- Paket keanggotaan Gratis, Premium Bulanan (Rp10.000/30 hari), Premium Tahunan (Rp99.000/1 tahun).
+- Pengajuan langganan dan panel admin untuk aktivasi/penghapusan pengajuan.
+- Dashboard admin: data peminjaman, status, jatuh tempo, estimasi denda, hapus data pinjaman yang keliru, dan ringkasan anggota.
+- Masa pinjam 7 hari setelah disetujui; denda contoh Rp2.000 per hari keterlambatan.
 
-CARA MENJALANKAN
+CARA MENJALANKAN:
 1. Ekstrak ZIP.
-2. Buka folder di VS Code.
-3. Semua file HTML, style.css, script.js, dan enhancements.js harus berada di folder yang sama.
-4. Jalankan index.html melalui browser atau Live Server.
+2. Buka folder Pustaka-Lontara-Mobile-Fix 23 di VS Code.
+3. Jalankan melalui Live Server atau hosting web.
+4. Login demo admin:
+   Email: admin@pustakalontara.id
+   Password: LontaraAdmin!2026
 
-LOGIN ADMIN DEMO
-Email: admin@pustakalontara.id
-Kata sandi: LontaraAdmin!2026
+PENTING — BATASAN KEAMANAN:
+Versi ini masih prototipe front-end. Akun, sesi, peminjaman, langganan dan dashboard disimpan di localStorage browser. Artinya belum tersinkron antara perangkat dan BUKAN autentikasi Firebase. Password demo admin tertanam pada kode dan hanya untuk pengujian lokal; jangan gunakan untuk website publik.
+Agar siap dipublikasikan, tahap berikutnya wajib mengganti autentikasi demo dengan Firebase Authentication, menyimpan peminjaman/langganan/profil ke Realtime Database, membuat Security Rules yang sesuai, serta memverifikasi role admin di server/database. Jangan memasang aturan database terbuka.
+Paket langganan belum menerima pembayaran otomatis. Admin memverifikasi pembayaran secara manual.
+Delapan buku yang ditampilkan adalah data katalog contoh. Tautan PDF belum disediakan; untuk fitur baca PDF, unggah file yang memang kamu miliki/berhak distribusikan ke Firebase Storage lalu simpan URL-nya di data buku.
 
-PENTING — BATASAN VERSI DEMO
-Sistem akun, sesi, peminjaman, dan langganan versi ini masih menggunakan localStorage browser.
-Artinya, data tidak tersinkron otomatis antara HP pengguna dan laptop admin. Password juga
-belum dilindungi oleh server. Untuk website yang benar-benar dipublikasikan, wajib gunakan
-backend/database dan autentikasi aman (misalnya Firebase atau Supabase), serta gateway
-pembayaran jika ingin menerima pembayaran otomatis.
-
-Aturan contoh yang dapat diubah di enhancements.js:
-- LOAN_DAYS = 7 hari.
-- FINE_PER_DAY = 2000 rupiah per hari.
-- Paket Premium = Rp10.000 per bulan.
-Harga dan ketentuan ini adalah contoh awal, bukan ketentuan resmi perpustakaan.
+Pengaturan contoh yang bisa diubah di enhancements.js:
+- LOAN_DAYS = 7
+- FINE_PER_DAY = 2000
+- PLANS: nama, harga, masa paket

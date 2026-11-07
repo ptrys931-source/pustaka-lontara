@@ -2,69 +2,91 @@
 const books = [
   {
     id: 1,
-    title: "Misteri Dasar Samudera",
-    author: "Andika Pratama",
-    category: "Alam",
+    title: "Alice’s Adventures in Wonderland",
+    author: "Lewis Carroll",
+    category: "Misteri",
     type: "Digital",
-    image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=500",
-    description: "Mengenal kehidupan laut, ekosistem bawah laut, dan berbagai keunikan samudera.",
-    rating: 4.8,
-    link: ""
+    image: "https://images.unsplash.com/photo-1512820488729-1b6b8b6f4b5a?w=500",
+    description: "Petualangan Alice di dunia ajaib yang penuh teka-teki, tokoh unik, dan kejadian tak terduga.",
+    rating: 4.9,
+    link: "https://www.gutenberg.org/ebooks/11.html.images"
   },
   {
     id: 2,
-    title: "Arsitektur Kosmik Bima Sakti",
-    author: "Dimas Saputra",
-    category: "Sains",
+    title: "The Wonderful Wizard of Oz",
+    author: "L. Frank Baum",
+    category: "Alam",
     type: "Digital",
-    image: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=500",
-    description: "Mempelajari galaksi, planet, bintang, dan berbagai fenomena alam semesta.",
+    image: "https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=500",
+    description: "Kisah Dorothy dan teman-temannya dalam perjalanan menakjubkan menuju Kota Zamrud.",
     rating: 4.9,
-    link: ""
+    link: "https://www.gutenberg.org/ebooks/55.html.images"
   },
   {
     id: 3,
-    title: "Atlas Awan Nusantara",
-    author: "Rina Amelia",
-    category: "Alam",
-    type: "Fisik",
-    image: "https://images.unsplash.com/photo-1534088568595-a066f410bcda?w=500",
-    description: "Mengenal jenis awan, cuaca, dan fenomena atmosfer di Indonesia.",
-    rating: 4.7,
-    link: ""
+    title: "Anne of Green Gables",
+    author: "Lucy Maud Montgomery",
+    category: "Sejarah",
+    type: "Digital",
+    image: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=500",
+    description: "Kisah Anne Shirley, seorang anak yatim piatu yang menemukan keluarga dan persahabatan di Green Gables.",
+    rating: 4.8,
+    link: "https://www.gutenberg.org/ebooks/45.html.images"
   },
   {
     id: 4,
-    title: "Planetarium Saku",
-    author: "Fajar Ramadhan",
-    category: "Sains",
-    type: "Fisik",
-    image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=500",
-    description: "Panduan sederhana untuk mengenal planet dan benda-benda langit.",
+    title: "The Secret Garden",
+    author: "Frances Hodgson Burnett",
+    category: "Alam",
+    type: "Digital",
+    image: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=500",
+    description: "Kisah persahabatan dan pemulihan yang bermula dari sebuah taman rahasia yang terlupakan.",
     rating: 4.8,
-    link: ""
+    link: "https://www.gutenberg.org/ebooks/113.html.images"
   },
   {
     id: 5,
-    title: "Jejak Peradaban Rempah",
-    author: "Nadia Putri",
-    category: "Sejarah",
+    title: "The Adventures of Sherlock Holmes",
+    author: "Arthur Conan Doyle",
+    category: "Misteri",
     type: "Digital",
-    image: "https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=500",
-    description: "Menelusuri sejarah perdagangan rempah dan perkembangan peradaban Nusantara.",
+    image: "https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?w=500",
+    description: "Kumpulan kasus detektif Sherlock Holmes dan Dr. Watson dalam memecahkan berbagai misteri.",
     rating: 4.9,
-    link: ""
+    link: "https://www.gutenberg.org/ebooks/1661.html.images"
   },
   {
     id: 6,
-    title: "Ensiklopedia Paradoks Waktu",
-    author: "Rizky Maulana",
-    category: "Misteri",
+    title: "Around the World in Eighty Days",
+    author: "Jules Verne",
+    category: "Sejarah",
+    type: "Digital",
+    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500",
+    description: "Petualangan Phileas Fogg yang bertaruh untuk mengelilingi dunia dalam waktu delapan puluh hari.",
+    rating: 4.8,
+    link: "https://www.gutenberg.org/ebooks/103.html.images"
+  },
+  {
+    id: 7,
+    title: "Black Beauty",
+    author: "Anna Sewell",
+    category: "Alam",
+    type: "Digital",
+    image: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=500",
+    description: "Kisah kehidupan seekor kuda yang mengajak pembaca memahami kasih sayang dan perlakuan baik terhadap hewan.",
+    rating: 4.8,
+    link: "https://www.gutenberg.org/ebooks/271.html.images"
+  },
+  {
+    id: 8,
+    title: "Little Women",
+    author: "Louisa May Alcott",
+    category: "Sejarah",
     type: "Digital",
     image: "https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=500",
-    description: "Membahas berbagai misteri waktu, teori, dan fakta menarik.",
-    rating: 4.6,
-    link: ""
+    description: "Kisah empat saudari March tentang keluarga, persahabatan, cita-cita, dan perjalanan menuju kedewasaan.",
+    rating: 4.9,
+    link: "https://www.gutenberg.org/ebooks/514.html.images"
   }
 ];
 const $ = (s, root=document) => root.querySelector(s);

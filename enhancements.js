@@ -9,6 +9,7 @@
   const accountKey='pustakaAccounts', sessionKey='pustakaSession', subKey='pustakaSubscriptions', borrowStoreKey='pustakaBorrowRequests';
   const ADMIN_EMAIL='admin@pustakalontara.id', ADMIN_PASSWORD='LontaraAdmin!2026';
   const FINE_PER_DAY=2000, LOAN_DAYS=7;
+  const PLANS=[{id:'basic',name:'Basic',price:0,period:'selamanya',desc:'Menjelajahi katalog dan menyimpan buku favorit.'},{id:'monthly',name:'Premium Bulanan',price:10000,period:'30 hari',desc:'Akses layanan anggota premium dan prioritas layanan.'},{id:'yearly',name:'Premium Tahunan',price:99000,period:'1 tahun',desc:'Pilihan hemat untuk anggota aktif sepanjang tahun.'}];
   let accounts=read(accountKey,[]), session=read(sessionKey,null);
   if(!accounts.some(a=>a.email===ADMIN_EMAIL)) { accounts.push({name:'Administrator',email:ADMIN_EMAIL,password:ADMIN_PASSWORD,role:'admin'}); write(accountKey,accounts); }
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -24,7 +25,7 @@
     <label>Kata sandi<input id="authPassword" type="password" autocomplete="current-password" minlength="6" placeholder="Minimal 6 karakter" required></label>
     <button class="btn-primary" id="authSubmit" type="submit">Masuk</button></form>
     <p class="auth-switch" id="authSwitch">Belum punya akun? <button type="button" id="authToggle">Daftar</button></p>
-    <p class="auth-error" id="authError" aria-live="polite"></p><small class="auth-footnote">Akun demo tersimpan di browser perangkat ini. Untuk website publik, gunakan autentikasi server.</small>
+    <p class="auth-error" id="authError" aria-live="polite"></p><small class="auth-footnote">Akses perpustakaan khusus anggota. Gunakan email dan kata sandi akun kamu.</small>
   </section>`;
   document.body.appendChild(gate);
   let authMode='login';
@@ -38,8 +39,8 @@
     $('#authSwitch').innerHTML=authMode==='login'?'Belum punya akun? <button type="button" id="authToggle">Daftar</button>':'Sudah punya akun? <button type="button" id="authToggle">Masuk</button>';
     $('#authToggle').onclick=()=>{authMode=authMode==='login'?'register':'login';$('#authError').textContent='';renderAuth();};
   }
-  function showGate(){gate.classList.add('visible');document.body.classList.add('auth-locked');renderAuth();}
-  function hideGate(){gate.classList.remove('visible');document.body.classList.remove('auth-locked');}
+  function showGate(){document.documentElement.classList.remove('auth-checking');gate.classList.add('visible');document.body.classList.add('auth-locked');renderAuth();}
+  function hideGate(){document.documentElement.classList.remove('auth-checking');gate.classList.remove('visible');document.body.classList.remove('auth-locked');}
   function logout(){localStorage.removeItem(sessionKey);session=null;currentUser=null;showGate();toastMsg('Kamu sudah keluar dari akun.');}
   $('#authForm').addEventListener('submit',e=>{
     e.preventDefault(); const email=$('#authEmail').value.trim().toLowerCase(), password=$('#authPassword').value;
@@ -93,16 +94,18 @@
     if(path!=='langganan.html')return;
     const main=$('#membershipMount') || $('main');if(!main)return;
     const subs=read(subKey,[]), mine=subs.filter(s=>s.email===session?.email);
-    main.innerHTML=`<div><p class="section-desc">Pilih akses yang sesuai kebutuhan membaca. Langganan diproses setelah admin memverifikasi pembayaran.</p>
-    <div class="membership-grid"><article class="membership-card"><span class="plan-label">GRATIS</span><h3>Pembaca</h3><strong>Rp0</strong><p>Menjelajahi katalog, menyimpan favorit, dan mengajukan peminjaman sesuai ketentuan.</p><button class="btn-outline" disabled>Paket Saat Ini</button></article>
-    <article class="membership-card featured-plan"><span class="plan-label">PILIHAN</span><h3>Premium</h3><strong>Rp10.000<small>/bulan</small></strong><p>Dukungan untuk pengembangan perpustakaan dan akses prioritas layanan anggota.</p><button class="btn-primary" id="subscribeBtn">Ajukan Langganan</button></article></div>
-    <div class="membership-panel"><h3>Status Langganan Saya</h3>${mine.length?mine.map(s=>`<p><strong>${esc(s.plan)}</strong> · ${esc(s.status)} · ${esc(s.date)}</p>`).join(''):'<p>Belum ada pengajuan langganan.</p>'}</div>
-    <div class="membership-panel"><h3>Informasi Pembayaran</h3><p>Ajukan langganan terlebih dahulu. Admin akan menghubungi kamu untuk instruksi pembayaran dan mengaktifkan langganan setelah bukti pembayaran diverifikasi.</p><small>Harga paket dan manfaat dapat disesuaikan oleh pengelola.</small></div>`;
-    $('#subscribeBtn')?.addEventListener('click',()=>{
+    main.innerHTML=`<div><p class="section-desc">Pilih paket keanggotaan. Aktivasi dilakukan setelah admin memverifikasi pembayaran.</p>
+    <div class="membership-grid membership-grid-three">${PLANS.map(p=>`<article class="membership-card ${p.id==='monthly'?'featured-plan':''}"><span class="plan-label">${p.id==='monthly'?'PALING DIPILIH':p.id==='yearly'?'LEBIH HEMAT':'GRATIS'}</span><h3>${p.name}</h3><strong>${money(p.price)}${p.price?`<small>/${p.period}</small>`:''}</strong><p>${p.desc}</p><button class="${p.price?'btn-primary':'btn-outline'}" data-plan="${p.id}" ${p.price?'':'disabled'}>${p.price?'Pilih Paket':'Paket Gratis'}</button></article>`).join('')}</div>
+    <div class="membership-panel"><h3>Status Langganan Saya</h3>${mine.length?mine.map(s=>`<p><strong>${esc(s.plan)}</strong> · ${esc(s.status)} · ${esc(s.date)}${s.expiresAt?' · berakhir '+new Date(s.expiresAt).toLocaleDateString('id-ID'):''}</p>`).join(''):'<p>Belum ada pengajuan langganan.</p>'}</div>
+    <div class="membership-panel"><h3>Informasi Pembayaran</h3><p>Setelah memilih paket, admin akan memberikan instruksi pembayaran. Jangan mengirimkan kata sandi atau kode OTP kepada siapa pun.</p></div>`;
+    main.querySelectorAll('[data-plan]').forEach(btn=>btn.addEventListener('click',()=>{
       if(!session){showGate();return;}
-      const all=read(subKey,[]);if(all.some(s=>s.email===session.email&&s.status==='Menunggu')){toastMsg('Pengajuan langganan kamu masih menunggu verifikasi.');return;}
-      all.unshift({id:String(Date.now()),name:session.name,email:session.email,plan:'Premium bulanan',price:10000,status:'Menunggu',date:new Date().toLocaleDateString('id-ID')});write(subKey,all);toastMsg('Pengajuan langganan dikirim.');renderSubscriptionPage();
-    });
+      const plan=PLANS.find(p=>p.id===btn.dataset.plan);if(!plan||!plan.price)return;
+      const all=read(subKey,[]);
+      if(all.some(s=>s.email===session.email&&s.status==='Menunggu')){toastMsg('Pengajuan langganan kamu masih menunggu verifikasi.');return;}
+      all.unshift({id:String(Date.now()),uid:session.uid||'',name:session.name,email:session.email,plan:plan.name,planId:plan.id,price:plan.price,status:'Menunggu',date:new Date().toLocaleDateString('id-ID')});
+      write(subKey,all);toastMsg('Pengajuan langganan dikirim.');renderSubscriptionPage();
+    }));
   }
   renderSubscriptionPage();
 
@@ -121,9 +124,13 @@
       const due=r.dueDate?new Date(r.dueDate).toLocaleDateString('id-ID'):'—', fine=fineFor(r);
       return `<tr><td><strong>${esc(r.name)}</strong><small>${esc(r.phone||'')}</small><small>${esc(r.email||'')}</small></td><td>${esc(r.book)}<small>${esc(r.type)}</small></td><td>${esc(r.date||'—')}<small>Jatuh tempo: ${due}</small></td><td><span class="status">${esc(r.status)}</span></td><td><select aria-label="Ubah status" data-status-id="${esc(r.id)}"><option ${r.status==='Menunggu'?'selected':''}>Menunggu</option><option ${r.status==='Disetujui'?'selected':''}>Disetujui</option><option ${r.status==='Dikembalikan'?'selected':''}>Dikembalikan</option><option ${r.status==='Dibatalkan'?'selected':''}>Dibatalkan</option></select></td><td><strong>${money(fine)}</strong></td><td><button class="delete-borrow-btn" data-delete-id="${esc(r.id)}">Hapus</button></td></tr>`;
     }).join(''):'<tr><td colspan="7" class="table-empty">Belum ada data peminjaman.</td></tr>';
-    $('#statTotal')&&($('#statTotal').textContent=books.length);$('#statBorrow')&&($('#statBorrow').textContent=rows.length);$('#statWaiting')&&($('#statWaiting').textContent=rows.filter(r=>r.status==='Menunggu').length);$('#statUsers')&&($('#statUsers').textContent=new Set(rows.map(r=>r.email||r.phone)).size);
+    $('#statTotal')&&($('#statTotal').textContent=books.length);$('#statBorrow')&&($('#statBorrow').textContent=rows.length);$('#statWaiting')&&($('#statWaiting').textContent=rows.filter(r=>r.status==='Menunggu').length);$('#statUsers')&&($('#statUsers').textContent=new Set(rows.map(r=>r.email||r.phone)).size);$('#statSubscriptions')&&($('#statSubscriptions').textContent=read(subKey,[]).length);
     let panel=$('#subscriptionAdminPanel');if(!panel){panel=document.createElement('section');panel.id='subscriptionAdminPanel';panel.className='admin-panel subscription-admin-panel';$('.admin-panel')?.after(panel);}
     const subs=read(subKey,[]);panel.innerHTML=`<h3>Pengajuan Langganan</h3><div class="table-wrap"><table class="borrow-table"><thead><tr><th>Anggota</th><th>Paket</th><th>Harga</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${subs.length?subs.map(s=>`<tr><td>${esc(s.name)}<small>${esc(s.email)}</small></td><td>${esc(s.plan)}</td><td>${money(s.price)}</td><td>${esc(s.date)}</td><td>${esc(s.status)}</td><td><button class="approve-sub-btn" data-sub-id="${esc(s.id)}">Aktifkan</button> <button class="delete-borrow-btn" data-sub-delete="${esc(s.id)}">Hapus</button></td></tr>`).join(''):'<tr><td colspan="6">Belum ada pengajuan langganan.</td></tr>'}</tbody></table></div>`;
+    let customerPanel=$('#customerAdminPanel');if(!customerPanel){customerPanel=document.createElement('section');customerPanel.id='customerAdminPanel';customerPanel.className='admin-panel subscription-admin-panel';panel.after(customerPanel);}
+    const customerMap=new Map();
+    [...rows,...subs].forEach(x=>{if(x.email){const prev=customerMap.get(x.email)||{name:x.name,email:x.email,borrowCount:0,subscriptionCount:0};if(x.book)prev.borrowCount++;if(x.plan)prev.subscriptionCount++;customerMap.set(x.email,prev);}});
+    customerPanel.innerHTML=`<h3>Data Anggota / Pelanggan</h3><p class="admin-note">Daftar anggota yang pernah mengajukan peminjaman atau langganan pada browser ini.</p><div class="table-wrap"><table class="borrow-table"><thead><tr><th>Nama</th><th>Email</th><th>Total Peminjaman</th><th>Pengajuan Langganan</th></tr></thead><tbody>${[...customerMap.values()].map(c=>`<tr><td>${esc(c.name)}</td><td>${esc(c.email)}</td><td>${c.borrowCount}</td><td>${c.subscriptionCount}</td></tr>`).join('')||'<tr><td colspan="4">Belum ada data anggota.</td></tr>'}</tbody></table></div>`;
     tbody.querySelectorAll('[data-status-id]').forEach(sel=>sel.addEventListener('change',()=>{
       const all=read(borrowStoreKey,[]),r=all.find(x=>String(x.id)===sel.dataset.statusId);if(r){r.status=sel.value;if(sel.value==='Disetujui'){r.approvedAt=new Date().toISOString();const due=new Date(r.approvedAt);due.setDate(due.getDate()+LOAN_DAYS);r.dueDate=due.toISOString();}if(sel.value==='Dikembalikan')r.returnedAt=new Date().toISOString();write(borrowStoreKey,all);renderEnhancedAdmin();}
     }));
