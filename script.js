@@ -6,7 +6,7 @@ const books = [
     author: "Lewis Carroll",
     category: "Misteri",
     type: "Digital",
-    image: "https://images.unsplash.com/photo-1512820488729-1b6b8b6f4b5a?w=500",
+    image: "https://i.pinimg.com/1200x/69/b6/59/69b6598b4b9423324c5d0e1b1939c439.jpg",
     description: "Petualangan Alice di dunia ajaib yang penuh teka-teki, tokoh unik, dan kejadian tak terduga.",
     rating: 4.9,
     link: "https://www.gutenberg.org/ebooks/11.html.images"
@@ -17,7 +17,7 @@ const books = [
     author: "L. Frank Baum",
     category: "Alam",
     type: "Digital",
-    image: "https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=500",
+    image: "https://i.pinimg.com/736x/d2/6b/78/d26b784912fa0efa5a17f2c5f45250bf.jpg",
     description: "Kisah Dorothy dan teman-temannya dalam perjalanan menakjubkan menuju Kota Zamrud.",
     rating: 4.9,
     link: "https://www.gutenberg.org/ebooks/55.html.images"
@@ -28,7 +28,7 @@ const books = [
     author: "Lucy Maud Montgomery",
     category: "Sejarah",
     type: "Digital",
-    image: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=500",
+    image: "https://i.pinimg.com/736x/06/36/5b/06365bd9f65ae7b7b8042319540c7970.jpg",
     description: "Kisah Anne Shirley, seorang anak yatim piatu yang menemukan keluarga dan persahabatan di Green Gables.",
     rating: 4.8,
     link: "https://www.gutenberg.org/ebooks/45.html.images"
@@ -39,7 +39,7 @@ const books = [
     author: "Frances Hodgson Burnett",
     category: "Alam",
     type: "Digital",
-    image: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=500",
+    image: "https://i.pinimg.com/736x/50/13/a3/5013a37abc647f91fd4776b2e54adb8c.jpg",
     description: "Kisah persahabatan dan pemulihan yang bermula dari sebuah taman rahasia yang terlupakan.",
     rating: 4.8,
     link: "https://www.gutenberg.org/ebooks/113.html.images"
@@ -50,7 +50,7 @@ const books = [
     author: "Arthur Conan Doyle",
     category: "Misteri",
     type: "Digital",
-    image: "https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?w=500",
+    image: "https://i.pinimg.com/736x/ce/29/f2/ce29f2ee4f7617f73ee5f05a378e52fe.jpg",
     description: "Kumpulan kasus detektif Sherlock Holmes dan Dr. Watson dalam memecahkan berbagai misteri.",
     rating: 4.9,
     link: "https://www.gutenberg.org/ebooks/1661.html.images"
@@ -61,7 +61,7 @@ const books = [
     author: "Jules Verne",
     category: "Sejarah",
     type: "Digital",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500",
+    image: "https://i.pinimg.com/1200x/cf/fa/ef/cffaef637b6d9cd8e1b26f6656acca30.jpg",
     description: "Petualangan Phileas Fogg yang bertaruh untuk mengelilingi dunia dalam waktu delapan puluh hari.",
     rating: 4.8,
     link: "https://www.gutenberg.org/ebooks/103.html.images"
@@ -72,7 +72,7 @@ const books = [
     author: "Anna Sewell",
     category: "Alam",
     type: "Digital",
-    image: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=500",
+    image: "https://i.pinimg.com/736x/39/31/7d/39317d86732df0d03087cc7889d83fb3.jpg",
     description: "Kisah kehidupan seekor kuda yang mengajak pembaca memahami kasih sayang dan perlakuan baik terhadap hewan.",
     rating: 4.8,
     link: "https://www.gutenberg.org/ebooks/271.html.images"
@@ -83,7 +83,7 @@ const books = [
     author: "Louisa May Alcott",
     category: "Sejarah",
     type: "Digital",
-    image: "https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=500",
+    image: "https://i.pinimg.com/736x/ae/85/e1/ae85e143c738729359ec52b7fd546316.jpg",
     description: "Kisah empat saudari March tentang keluarga, persahabatan, cita-cita, dan perjalanan menuju kedewasaan.",
     rating: 4.9,
     link: "https://www.gutenberg.org/ebooks/514.html.images"
